@@ -1,0 +1,94 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0;
+    padding: 0;
+    background-color: darkslategrey;
+}
+.container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 20px;
+    background-color:gray;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+input, button {
+    margin: 8px 0;
+    padding: 12px;
+    width: calc(100% - 24px);
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    background-color: aquamarine;
+}
+button {
+    background: #9500ff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    transition: 0.3s;
+}
+button:hover {
+    background: #b30051;
+}
+.filters {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin: 15px 0;
+}
+.filters label {
+    cursor: pointer;
+}
+ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 15px;
+}
+li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color:aquamarine;
+    padding: 12px;
+    margin: 6px 0;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: relative;
+}
+.income { color: rgb(128, 0, 0); }
+.expense { color: red; }
+.btn-group button {
+    margin-left: 5px;
+    padding: 6px 10px;
+    font-size: 14px;
+}
+.edit-form {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background-color:burlywood;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+@media (max-width: 600px) {
+    .container {
+        width: 90%;
+        padding: 15px;
+    }
+    .filters {
+        flex-direction: column;
+        align-items: center;
+    }
+    .btn-group {
+        display: flex;
+        gap: 5px;
+    }
+}
+

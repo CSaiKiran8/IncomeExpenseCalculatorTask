@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Income Expense Calculator</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <h2>Income Expense Calculator</h2>
+        <h3>Balance: <span id="balance">0</span></h3>
+        <h4>Income: <span id="totalIncome" class="income">0</span> | 
+            Expense: <span id="totalExpense" class="expense">0</span></h4>
+        <div class="filters">
+            <label><input type="radio" name="filter" value="all" checked onclick="updateUI()"> All</label>
+            <label><input type="radio" name="filter" value="income" onclick="updateUI()"> Income</label>
+            <label><input type="radio" name="filter" value="expense" onclick="updateUI()"> Expense</label>
+        </div>
+        <input type="text" id="desc" placeholder="Description">
+        <input type="number" id="amount" placeholder="Amount">
+        <button onclick="addTransaction()">Add</button>
+        <button onclick="resetFields()">Reset</button>
+        <ul id="transactionList"></ul>
+    </div>
+
+    <script>
+        let transactions = JSON.parse(localStorage.getItem("transactions")) || [];
+        function updateUI() {
+            const balance = transactions.reduce((acc, t) => acc + t.amount, 0);
+            const income = transactions.filter(t => t.amount > 0).reduce((acc, t) => acc + t.amount, 0);
+            const expense = transactions.filter(t => t.amount < 0).reduce((acc, t) => acc + t.amount, 0);
+            document.getElementById("balance").textContent = balance;
+            document.getElementById("totalIncome").textContent = income;
+            document.getElementById("totalExpense").textContent = Math.abs(expense);
+            const filterValue = document.querySelector('input[name="filter"]:checked').value;
+            document.getElementById("transactionList").innerHTML = transactions.filter(t => 
+                filterValue === "all" || 
+                (filterValue === "income" && t.amount > 0) || 
+                (filterValue === "expense" && t.amount < 0)
+            ).map((t, index) => `
+                <li class="${t.amount > 0 ? 'income' : 'expense'}">
+                    <span>${t.desc} - ${t.amount}</span>
+                    <div class="btn-group">
+                        <button onclick="showEditForm(${index})">Edit</button>
+                        <button onclick="deleteTransaction(${index})">Delete</button>
+                    </div>
+                    <div class="edit-form" id="edit-form-${index}">
+                        <input type="text" id="edit-desc-${index}" value="${t.desc}">
+                        <input type="number" id="edit-amount-${index}" value="${t.amount}">
+                        <button onclick="saveEdit(${index})">Save</button>
+                    </div>
+                </li>
+            `).join("");
+            localStorage.setItem("transactions", JSON.stringify(transactions));
+        }
+        function addTransaction() {
+            const desc = document.getElementById("desc").value;
+            const amount = parseFloat(document.getElementById("amount").value);
+            if (!desc || isNaN(amount)) return;
+            transactions.push({ desc, amount });
+            updateUI();
+        }
+        function showEditForm(index) {
+            console.log("clicked");
+            document.getElementById(`edit-form-${index}`).style.display = "flex";
+        }
+        function saveEdit(index) {
+            const newDesc = document.getElementById(`edit-desc-${index}`).value;
+            const newAmount = parseFloat(document.getElementById(`edit-amount-${index}`).value);
+            if (newDesc && !isNaN(newAmount)) {
+                transactions[index] = { desc: newDesc, amount: newAmount };
+                updateUI();
+            }
+        }
+        function deleteTransaction(index) {
+            transactions.splice(index, 1);
+            updateUI();
+        }
+        function resetFields() {
+            document.getElementById("desc").value = "";
+            document.getElementById("amount").value = "";
+        }
+        updateUI();
+    </script>
+</body>
+</html>
