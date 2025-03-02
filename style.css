@@ -4,6 +4,7 @@ body {
     margin: 0;
     padding: 0;
     background-color: darkslategrey;
+    color:darkviolet;
 }
 .container {
     max-width: 600px;
